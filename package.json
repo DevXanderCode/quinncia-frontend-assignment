@@ -1,0 +1,62 @@
+{
+  "name": "quinncia-frontend-assigment",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "test",
+    "lint": "eslint ./src",
+    "start:dev": "webpack --config=config/webpack/server.dev.js && node dist/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Quinncia/quinncia-frontend-assigment.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Quinncia/quinncia-frontend-assigment/issues"
+  },
+  "homepage": "https://github.com/Quinncia/quinncia-frontend-assigment#readme",
+  "dependencies": {
+    "webpack": "^4.39.3",
+    "axios": "^0.19.0",
+    "express": "^4.17.1",
+    "hbs": "^4.0.4",
+    "prop-types": "^15.7.2",
+    "ramda": "^0.26.1",
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0",
+    "react-hot-loader": "^4.12.12",
+    "react-redux": "^7.1.1",
+    "redux": "^4.0.4",
+    "webpack-merge": "^4.2.2",
+    "redux-thunk": "^2.3.0",
+    "styled-components": "^4.3.2",
+    "webpack-dev-middleware": "^3.7.1",
+    "webpack-dev-server": "^3.8.0",
+    "webpack-hot-middleware": "^2.25.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.6.0",
+    "@babel/preset-env": "^7.6.0",
+    "@babel/preset-react": "^7.0.0",
+    "@hot-loader/react-dom": "^16.9.0",
+    "babel-eslint": "^10.0.3",
+    "babel-loader": "^8.0.6",
+    "css-loader": "^3.2.0",
+    "eslint": "^6.3.0",
+    "eslint-config-airbnb": "^18.0.1",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-react": "^7.14.3",
+    "eslint-plugin-react-hooks": "^1.7.0",
+    "file-loader": "^4.2.0",
+    "node-sass": "^4.12.0",
+    "sass-loader": "^8.0.0",
+    "style-loader": "^1.0.0",
+    "url-loader": "^2.1.0",
+    "webpack-cli": "^3.3.8",
+    "webpack-node-externals": "^1.7.2"
+  }
+}
