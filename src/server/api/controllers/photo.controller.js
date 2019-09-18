@@ -5,8 +5,8 @@ import every from 'lodash/every';
 import randomstring from 'randomstring';
 import {
   add,
-  update,
-  remove,
+  update as updateDB,
+  remove as removeDB,
   find,
 } from '../repositories/Database';
 
@@ -15,7 +15,7 @@ const imitateDBFailure = () => 'a' === randomstring.generate({
   capitalization: 'lowercase',
 });
 
-exports.create = async (req, res) => {
+export const create = async (req, res) => {
   const newPhoto = add(
     'photo',
     req.body,
@@ -34,8 +34,8 @@ exports.create = async (req, res) => {
 }
 
 
-exports.update = async (req, res) => {
-  update(
+export const update = async (req, res) => {
+  updateDB(
     'photo',
     req.params,
     req.body,
@@ -53,8 +53,8 @@ exports.update = async (req, res) => {
 }
 
 
-exports.delete = async (req, res) => {
-  remove(
+export const remove = async (req, res) => {
+  removeDB(
     'photo',
     req.params,
   );
@@ -67,7 +67,7 @@ exports.delete = async (req, res) => {
 }
 
 
-exports.getOne = async (req, res) => {
+export const getOne = async (req, res) => {
   const photos = find(
     'photo',
     req.params,
@@ -90,11 +90,11 @@ exports.getOne = async (req, res) => {
     });
 }
 
-exports.getContent = async (req, res) => {
+export const getContent = async (req, res) => {
   res.sendFile(path.join(__dirname, `../../storage/photo-${req.params.id}.png`));
 };
 
-exports.getMany = async (req, res) => {
+export const getMany = async (req, res) => {
   let photos = find(
     'photo',
     req.query,

@@ -4,6 +4,11 @@
     "@babel/react"
   ],
   "plugins": [
+    ["transform-runtime", {
+      "polyfill": false,
+      "regenerator": true
+    }],
+    "transform-async-to-generator",
     "react-hot-loader/babel"
   ]
 }

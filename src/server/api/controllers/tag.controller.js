@@ -5,7 +5,7 @@ import {
   add,
 } from '../repositories/Database';
 
-exports.create = async (req, res) => {
+export const create = async (req, res) => {
   const newTag = add(
     'tag',
     req.body,
@@ -19,7 +19,7 @@ exports.create = async (req, res) => {
     });
 };
 
-exports.getOne = async (req, res) => {
+export const getOne = async (req, res) => {
   const tags = find(
     'tag',
     {},
@@ -38,7 +38,7 @@ exports.getOne = async (req, res) => {
     });
 };
 
-exports.getMany = async (req, res) => {
+export const getMany = async (req, res) => {
   let tags = find(
     'tag',
     {},

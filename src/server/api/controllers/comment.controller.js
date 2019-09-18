@@ -6,8 +6,8 @@ import randomstring from 'randomstring';
 
 import {
   add,
-  update,
-  remove,
+  update as updateDB,
+  remove as removeDB,
   find,
 } from '../repositories/Database';
 
@@ -39,7 +39,7 @@ const recursivelyLoadComments = (commentID, initialStep) => {
   );
 };
 
-exports.create = async (req, res) => {
+export const create = async (req, res) => {
   const newComment = add(
     'comment',
     req.body,
@@ -53,8 +53,8 @@ exports.create = async (req, res) => {
     });
 };
 
-exports.update = async (req, res) => {
-  update(
+export const update = async (req, res) => {
+  updateDB(
     'comment',
     req.params,
     req.body,
@@ -71,8 +71,8 @@ exports.update = async (req, res) => {
     });
 };
 
-exports.delete = async (req, res) => {
-  remove(
+export const remove = async (req, res) => {
+  removeDB(
     'comment',
     req.params,
   );
@@ -85,7 +85,7 @@ exports.delete = async (req, res) => {
 };
 
 
-exports.getOne = async (req, res) => {
+export const getOne = async (req, res) => {
   const comments = find(
     'comment',
     req.params,
@@ -109,7 +109,7 @@ exports.getOne = async (req, res) => {
 };
 
 
-exports.getMany = async (req, res) => {
+export const getMany = async (req, res) => {
   let comments = find(
     'comment',
     req.query,

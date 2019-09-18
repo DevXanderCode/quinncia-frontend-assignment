@@ -1,12 +1,18 @@
 import express from 'express';
-import controller from '../controllers/comment.controller';
+import {
+  create,
+  update,
+  getOne,
+  remove,
+  getMany,
+} from '../controllers/comment.controller';
 
 const router = express.Router();
 
-router.post('/', controller.create);
-router.put('/:_id', controller.update);
-router.get('/:_id', controller.getOne);
-router.delete('/:_id', controller.delete);
-router.get('/many', controller.getMany);
+router.post('/', create);
+router.put('/:_id', update);
+router.get('/:_id', getOne);
+router.delete('/:_id', remove);
+router.get('/many', getMany);
 
 export default router;
