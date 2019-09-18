@@ -25,6 +25,10 @@ const recursivelyLoadComments = (commentID, initialStep) => {
     { [key]: commentID },
   );
 
+  if (!comments || comments.length === 0) {
+    return [];
+  }
+
   return merge(
     {
       comments: map(
@@ -129,6 +133,13 @@ exports.getMany = async (req, res) => {
 
     comments = drop(comments, (currentPage - 1) * perPage);
     comments = slice(comments, 0, perPage);
+  }
+
+  if (req.query.subComments) {
+    comments = map(comments, ({ _id }) => recursivelyLoadComments(
+      _id,
+      true,
+    ));
   }
 
   return res

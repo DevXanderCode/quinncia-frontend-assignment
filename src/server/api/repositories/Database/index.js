@@ -21,7 +21,6 @@ const schemas = {
   photo: {
     _id: true,
     name: true,
-    filePath: true,
     likes: true,
     tagIDs: true,
     commentIDs: true,

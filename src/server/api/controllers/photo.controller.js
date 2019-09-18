@@ -1,8 +1,7 @@
-import drop from 'lodash/drop';
 import map from 'lodash/map';
-import every from 'lodash/every';
 import some from 'lodash/some';
-import flatten from 'lodash/flatten';
+import drop from 'lodash/drop';
+import every from 'lodash/every';
 import randomstring from 'randomstring';
 import {
   add,
@@ -21,6 +20,10 @@ exports.create = async (req, res) => {
     'photo',
     req.body,
   );
+
+  await new Promise((res) => {
+    fs.move(req.file.path, `${__dirname}/../../storage/photo-${newPhoto._id}.png`, res);
+  });
 
   return res
     .status(200)
@@ -87,6 +90,9 @@ exports.getOne = async (req, res) => {
     });
 }
 
+exports.getContent = async (req, res) => {
+  res.sendFile(path.join(__dirname, `../../storage/photo-${req.params.id}.png`));
+};
 
 exports.getMany = async (req, res) => {
   let photos = find(
@@ -104,7 +110,7 @@ exports.getMany = async (req, res) => {
   }
 
   if (req.query.tags) {
-    const _tagIDs = map(
+    const tags = map(
       req.query.tags,
       (_tag) => find(
         'tag',
@@ -115,7 +121,7 @@ exports.getMany = async (req, res) => {
     photos = filter(
       photos,
       ({ tagIDs }) => every(
-        _tagIDs,
+        tags,
         _tid => some(
           tagIDs,
           tagID => tagID === _tid,
@@ -133,28 +139,6 @@ exports.getMany = async (req, res) => {
     photos = drop(photos, (currentPage - 1) * perPage);
     photos = slice(photos, 0, perPage);
   }
-
-  
-  // Populate comments
-  // if (req.query.comments) {
-  //   photos = map(
-  //     photos,
-  //     (photo) => {
-  //       const comments = map(
-  //         photo.commentIDs,
-  //         cID => recursivelyLoadComments(cID, true),
-  //       );
-
-  //       return merge(
-  //         {
-  //           comments,
-  //           commentIDs: null,
-  //         },
-  //         photo,
-  //       );
-  //     },
-  //   );
-  // }
 
   return res
     .status(200)
