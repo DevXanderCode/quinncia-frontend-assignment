@@ -2,6 +2,7 @@ import each from 'lodash/each';
 import every from 'lodash/every';
 import merge from 'lodash/merge';
 import rmv from 'lodash/remove';
+import filter from 'lodash/filter';
 
 import randomstring from 'randomstring';
 
@@ -47,9 +48,7 @@ const automaticAppendWhen = {
   },
 };
 
-const filterObject = (filter, object) => {
-  return filter(object, (_, key) => filter[key]);
-};
+const filterObject = (fltr, object) => filter(object, (_, key) => fltr[key]);
 
 const attachData = (operationName, body) => {
   const generalData = {
@@ -65,12 +64,12 @@ const attachData = (operationName, body) => {
       generalData,
     ),
   );
-}
+};
 
 const add = (featureName, body) => {
   const newDocument = filterObject(
     schemas[featureName],
-    attachData('created', body)
+    attachData('created', body),
   );
 
   Database[featureName].push(newDocument);
@@ -93,7 +92,11 @@ const remove = (featureName, parameters) => {
 const update = (featureName, parameters, body) => {
   const objects = find(featureName, parameters);
   remove(featureName, parameters);
-  each(objects, object => add(featureName, object));
+  each(objects, (object) => add(featureName, merge(
+    {},
+    object,
+    body,
+  )));
 };
 
 export {

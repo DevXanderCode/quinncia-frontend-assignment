@@ -1,8 +1,7 @@
 import map from 'lodash/map';
-import some from 'lodash/some';
 import drop from 'lodash/drop';
-import every from 'lodash/every';
-import flatten from 'lodash/flatten';
+import slice from 'lodash/slice';
+import merge from 'lodash/merge';
 import randomstring from 'randomstring';
 
 import {
@@ -12,15 +11,15 @@ import {
   find,
 } from '../repositories/Database';
 
-const imitateDBFailure = () => 'a' === randomstring.generate({
+const imitateDBFailure = () => randomstring.generate({
   length: 1,
   capitalization: 'lowercase',
-});
+}) === 'a';
 
 const recursivelyLoadComments = (commentID, initialStep) => {
   const key = initialStep ? '_id' : 'parentID';
 
-  let comments = find(
+  const comments = find(
     'comment',
     { [key]: commentID },
   );
@@ -38,7 +37,7 @@ const recursivelyLoadComments = (commentID, initialStep) => {
     },
     comments,
   );
-}
+};
 
 exports.create = async (req, res) => {
   const newComment = add(
@@ -52,7 +51,7 @@ exports.create = async (req, res) => {
       success: true,
       comment: newComment,
     });
-}
+};
 
 exports.update = async (req, res) => {
   update(
@@ -70,7 +69,7 @@ exports.update = async (req, res) => {
         req.params,
       ),
     });
-}
+};
 
 exports.delete = async (req, res) => {
   remove(
@@ -83,7 +82,7 @@ exports.delete = async (req, res) => {
     .json({
       success: true,
     });
-}
+};
 
 
 exports.getOne = async (req, res) => {
@@ -107,7 +106,7 @@ exports.getOne = async (req, res) => {
       success: true,
       comment: comments[0],
     });
-}
+};
 
 
 exports.getMany = async (req, res) => {
@@ -148,4 +147,4 @@ exports.getMany = async (req, res) => {
       comments,
       success: true,
     });
-}
+};

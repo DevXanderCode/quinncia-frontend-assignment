@@ -6,12 +6,10 @@ import commentRoutes from './comment.route';
 
 const router = express.Router();
 
-router.get('/status', (req, res, next) => {
-  return res.status(200).json({
-    status: 'OK',
-    message: 'Service is healthy'
-  });
-});
+router.get('/status', (req, res) => res.status(200).json({
+  status: 'OK',
+  message: 'Service is healthy',
+}));
 
 router.use('/tag', tagRoutes);
 router.use('/photo', photoRoutes);

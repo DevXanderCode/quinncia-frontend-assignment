@@ -1,3 +1,6 @@
+import drop from 'lodash/drop';
+import find from 'lodash/find';
+import slice from 'lodash/slice';
 import {
   add,
 } from '../repositories/Database';
@@ -14,17 +17,17 @@ exports.create = async (req, res) => {
       success: true,
       tag: newTag,
     });
-}
+};
 
 exports.getOne = async (req, res) => {
-  let tags = find(
+  const tags = find(
     'tag',
     {},
   );
 
-  tag = find(
+  const tag = find(
     tags,
-    tag => tag.indexOf(req.query.tag) > -1,
+    (_tag) => _tag.indexOf(req.query.tag) > -1,
   );
 
   return res
@@ -33,7 +36,7 @@ exports.getOne = async (req, res) => {
       tag: tag || '',
       success: true,
     });
-}
+};
 
 exports.getMany = async (req, res) => {
   let tags = find(
@@ -57,4 +60,4 @@ exports.getMany = async (req, res) => {
       tags,
       success: true,
     });
-}
+};
