@@ -1,14 +1,16 @@
 import map from 'lodash/map';
+import find from 'lodash/find';
 import drop from 'lodash/drop';
 import slice from 'lodash/slice';
 import merge from 'lodash/merge';
+import concat from 'lodash/concat';
 import randomstring from 'randomstring';
 
 import {
   add,
   update as updateDB,
   remove as removeDB,
-  find,
+  find as findDB,
 } from '../repositories/Database';
 
 const imitateDBFailure = () => randomstring.generate({
@@ -19,7 +21,7 @@ const imitateDBFailure = () => randomstring.generate({
 const recursivelyLoadComments = (commentID, initialStep) => {
   const key = initialStep ? '_id' : 'parentID';
 
-  const comments = find(
+  const comments = findDB(
     'comment',
     { [key]: commentID },
   );
@@ -42,7 +44,41 @@ const recursivelyLoadComments = (commentID, initialStep) => {
 export const create = async (req, res) => {
   const newComment = add(
     'comment',
-    req.body,
+    merge(
+      {
+        parentID: 0,
+      },
+      req.body,
+    ),
+  );
+
+  const {
+    photoID,
+  } = req.body;
+
+  const photos = findDB(
+    'photo',
+    { _id: photoID },
+  );
+
+  if (!photos || photos.length === 0) {
+    return res
+      .status(400)
+      .json({
+        success: false,
+        message: 'No photo associated with this ID',
+      });
+  }
+
+  updateDB(
+    'photo',
+    { _id: photoID },
+    {
+      commentIDs: concat(
+        photos[0].commentIDs,
+        newComment._id,
+      ),
+    },
   );
 
   return res
@@ -86,7 +122,7 @@ export const remove = async (req, res) => {
 
 
 export const getOne = async (req, res) => {
-  const comments = find(
+  const comments = findDB(
     'comment',
     req.params,
   );
@@ -110,9 +146,9 @@ export const getOne = async (req, res) => {
 
 
 export const getMany = async (req, res) => {
-  let comments = find(
+  let comments = findDB(
     'comment',
-    req.query,
+    { parentID: '0' },
   );
 
   if (imitateDBFailure()) {
@@ -124,11 +160,11 @@ export const getMany = async (req, res) => {
       });
   }
 
-  if (req.query.pagination) {
+  if (req.query.perPage && req.query.currentPage) {
     const {
       perPage = 10,
       currentPage = 1,
-    } = req.query.pagination;
+    } = req.query;
 
     comments = drop(comments, (currentPage - 1) * perPage);
     comments = slice(comments, 0, perPage);

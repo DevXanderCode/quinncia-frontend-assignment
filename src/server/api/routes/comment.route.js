@@ -11,8 +11,8 @@ const router = express.Router();
 
 router.post('/', create);
 router.put('/:_id', update);
+router.get('/many', getMany);
 router.get('/:_id', getOne);
 router.delete('/:_id', remove);
-router.get('/many', getMany);
 
 export default router;

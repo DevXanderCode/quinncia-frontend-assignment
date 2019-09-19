@@ -3,6 +3,7 @@ import find from 'lodash/find';
 import slice from 'lodash/slice';
 import {
   add,
+  find as findDB,
 } from '../repositories/Database';
 
 export const create = async (req, res) => {
@@ -20,14 +21,14 @@ export const create = async (req, res) => {
 };
 
 export const getOne = async (req, res) => {
-  const tags = find(
+  const tags = findDB(
     'tag',
     {},
   );
 
   const tag = find(
     tags,
-    (_tag) => _tag.indexOf(req.query.tag) > -1,
+    (_tag) => _tag.name.indexOf(req.query.tag) > -1,
   );
 
   return res
@@ -39,16 +40,16 @@ export const getOne = async (req, res) => {
 };
 
 export const getMany = async (req, res) => {
-  let tags = find(
+  let tags = findDB(
     'tag',
     {},
   );
 
-  if (req.query.pagination) {
+  if (req.query.currentPage && req.query.perPage) {
     const {
       perPage = 10,
       currentPage = 1,
-    } = req.query.pagination;
+    } = req.query;
 
     tags = drop(tags, (currentPage - 1) * perPage);
     tags = slice(tags, 0, perPage);

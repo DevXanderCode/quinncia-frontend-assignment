@@ -48,7 +48,16 @@ const automaticAppendWhen = {
   },
 };
 
-const filterObject = (fltr, object) => filter(object, (_, key) => fltr[key]);
+const filterObject = (fltr, object) => {
+  const newObject = {};
+  for (const i in object) {
+    if (fltr[i]) {
+      newObject[i] = object[i];
+    }
+  }
+
+  return newObject;
+};
 
 const attachData = (operationName, body) => {
   const generalData = {
@@ -72,31 +81,31 @@ const add = (featureName, body) => {
     attachData('created', body),
   );
 
-  Database[featureName].push(newDocument);
+  Database[`${featureName}s`].push(newDocument);
   return newDocument;
 };
 
 const find = (featureName, parameters) => filter(
-  Database[featureName],
+  Database[`${featureName}s`],
   (document) => every(parameters, (parameter, key) => document[key] === parameter),
 );
 
 
 const remove = (featureName, parameters) => {
   rmv(
-    Database[featureName],
+    Database[`${featureName}s`],
     (document) => every(parameters, (parameter, key) => document[key] === parameter),
   );
 };
 
 const update = (featureName, parameters, body) => {
   const objects = find(featureName, parameters);
-  remove(featureName, parameters);
-  each(objects, (object) => add(featureName, merge(
-    {},
-    object,
-    body,
-  )));
+  each(objects, (object, key) => {
+    objects[key] = merge(
+      object,
+      body,
+    );
+  });
 };
 
 export {

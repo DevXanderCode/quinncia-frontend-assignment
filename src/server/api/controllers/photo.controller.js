@@ -2,27 +2,44 @@ import map from 'lodash/map';
 import some from 'lodash/some';
 import drop from 'lodash/drop';
 import every from 'lodash/every';
+import slice from 'lodash/slice';
+import filter from 'lodash/filter';
+import merge from 'lodash/merge';
+import concat from 'lodash/concat';
+import fs from 'fs';
+import path from 'path';
 import randomstring from 'randomstring';
 import {
   add,
   update as updateDB,
   remove as removeDB,
-  find,
+  find as findDB,
 } from '../repositories/Database';
 
-const imitateDBFailure = () => 'a' === randomstring.generate({
+const imitateDBFailure = () => randomstring.generate({
   length: 1,
   capitalization: 'lowercase',
-});
+}) === 'a';
 
 export const create = async (req, res) => {
   const newPhoto = add(
     'photo',
-    req.body,
+    merge(
+      {
+        likes: 0,
+        tagIDs: [],
+        commentIDs: [],
+      },
+      req.body,
+    ),
   );
 
-  await new Promise((res) => {
-    fs.move(req.file.path, `${__dirname}/../../storage/photo-${newPhoto._id}.png`, res);
+  await new Promise((result) => {
+    fs.rename(
+      req.file.path,
+      `/Users/Shared/projects/Quinncia/quinncia-frontend-assignment/src/server/storage/photo-${newPhoto._id}.png`,
+      result,
+    );
   });
 
   return res
@@ -31,7 +48,7 @@ export const create = async (req, res) => {
       success: true,
       photo: newPhoto,
     });
-}
+};
 
 
 export const update = async (req, res) => {
@@ -45,13 +62,53 @@ export const update = async (req, res) => {
     .status(200)
     .json({
       success: true,
-      photo: find(
+      photo: findDB(
         'photo',
         req.params,
       ),
     });
-}
+};
 
+
+export const attachTags = async (req, res) => {
+  const {
+    tagIDs,
+  } = req.body;
+
+  const {
+    _id,
+  } = req.params;
+
+  const photos = findDB(
+    'photo',
+    { _id },
+  );
+
+  if (!photos || photos.length === 0) {
+    return res
+      .status(400)
+      .json({
+        success: false,
+        message: 'No photo associated with this ID',
+      });
+  }
+
+  updateDB(
+    'photo',
+    { _id },
+    { tagIDs: concat(photos[0].tagIDs, tagIDs) },
+  );
+
+  return res
+    .status(200)
+    .json({
+      success: true,
+      photo: findDB(
+        'photo',
+        req.params,
+      ),
+    });
+};
 
 export const remove = async (req, res) => {
   removeDB(
@@ -59,16 +116,28 @@ export const remove = async (req, res) => {
     req.params,
   );
 
+  const {
+    _id,
+  } = req.params;
+
+  // Delete photo from Storage
+  try {
+    fs.unlinkSync(path.join(
+      '/Users/Shared/projects/Quinncia/quinncia-frontend-assignment/src/server/storage/photo',
+      `../../storage/photo-${_id}.png`,
+    ));
+  } catch {}
+
   return res
     .status(200)
     .json({
       success: true,
     });
-}
+};
 
 
 export const getOne = async (req, res) => {
-  const photos = find(
+  const photos = findDB(
     'photo',
     req.params,
   );
@@ -88,14 +157,17 @@ export const getOne = async (req, res) => {
       success: true,
       photo: photos[0],
     });
-}
+};
 
 export const getContent = async (req, res) => {
-  res.sendFile(path.join(__dirname, `../../storage/photo-${req.params.id}.png`));
+  res.sendFile(path.join(
+    '/Users/Shared/projects/Quinncia/quinncia-frontend-assignment/src/server/storage/photo',
+    `../../storage/photo-${req.params.id}.png`,
+  ));
 };
 
 export const getMany = async (req, res) => {
-  let photos = find(
+  let photos = findDB(
     'photo',
     req.query,
   );
@@ -112,7 +184,7 @@ export const getMany = async (req, res) => {
   if (req.query.tags) {
     const tags = map(
       req.query.tags,
-      (_tag) => find(
+      (_tag) => findDB(
         'tag',
         { name: _tag },
       ),
@@ -122,10 +194,10 @@ export const getMany = async (req, res) => {
       photos,
       ({ tagIDs }) => every(
         tags,
-        _tid => some(
+        (_tid) => some(
           tagIDs,
-          tagID => tagID === _tid,
-        )
+          (tagID) => tagID === _tid,
+        ),
       ),
     );
   }
@@ -146,4 +218,4 @@ export const getMany = async (req, res) => {
       photos,
       success: true,
     });
-}
+};
