@@ -48,7 +48,7 @@ To start off:
 
 ---
   
-**[Get] Get one photo**
+**[GET] Get one photo**
 * **URL: `/photo/:id`**
 * **Params: -**
 * **Success Response**
@@ -56,7 +56,7 @@ To start off:
   - success: true
   - photo: {}
 * **Error Response**
-  - code: <error-code>
+  - code: error-code
   - success: false
   - error: "message"
   
@@ -69,19 +69,19 @@ To start off:
   - code: 200
   - success: true
 * **Error Response**
-  - code: <error-code>
+  - code: error-code
   - success: false
   - error: "message"
 
 ---
 
-**[Get] Get content of the photo**
+**[GET] Get content of the photo**
 * **URL: `/photo/content/:id`**
 * **Params: -**
 * **Success Response**
   - code: 200
 * **Error Response**
-  - code: <error-code>
+  - code: error-code
   - success: false
   - error: "message"
  
@@ -99,7 +99,7 @@ To start off:
   - success: true
   - photo: {}
 * **Error Response**
-  - code: <error-code>
+  - code: error-code
   - success: false
   - error: "message"
 
@@ -114,7 +114,7 @@ To start off:
   - success: true
   - photo: {}
 * **Error Response**
-  - code: <error-code>
+  - code: error-code
   - success: false
   - error: "message"
 
@@ -123,7 +123,7 @@ To start off:
   **[POST] Add a photo**
 * **URL: `/photo/`**
 * **Multipart body:**
-  - "profile": <photo file>
+  - "profile": photo file
   - [optional] name = ""
   - [optional] likes = Number
   - [optional] tagIDs = []
@@ -133,6 +133,129 @@ To start off:
   - success: true
   - photo: {}
 * **Error Response**
+  - code: error-code
+  - success: false
+  - error: "message"
+  
+---
+
+**[GET] Get list of tags**
+* **URL: `/tag/many`**
+* **Params:**
+  - [optional] perPage (number of elements per page)
+  - [optional] currentPage
+* **Success Response**
+  - code: 200
+  - success: true
+  - tags: [array]
+* **Error Response**
   - code: <error-code>
+  - success: false
+  - error: "message"
+
+---
+  
+**[GET] Get one tag**
+* **URL: `/tag/by-name`**
+* **Params:**
+  - [required] tag (name)
+* **Success Response**
+  - code: 200
+  - success: true
+  - tag: {}
+* **Error Response**
+  - code: error-code
+  - success: false
+  - error: "message"
+  
+---
+
+  **[POST] Add a tag**
+* **URL: `/tag/`**
+* **Body:**
+  - [optional] name = ""
+* **Success Response**
+  - code: 200
+  - success: true
+  - tag: {}
+* **Error Response**
+  - code: error-code
+  - success: false
+  - error: "message"
+  
+---
+
+**[GET] Get list of comments**
+* **URL: `/comment/many`**
+* **Params:**
+  - [optional] perPage (number of elements per page)
+  - [optional] currentPage
+  - [optional] subComments Boolean (true to get sub comments)
+* **Success Response**
+  - code: 200
+  - success: true
+  - comments: [array]
+* **Error Response**
+  - code: <error-code>
+  - success: false
+  - error: "message"
+
+---
+  
+**[GET] Get one comment**
+* **URL: `/comment/:id`**
+* **Params:**
+  - [required] tag (name)
+* **Success Response**
+  - code: 200
+  - success: true
+  - comment: {}
+* **Error Response**
+  - code: error-code
+  - success: false
+  - error: "message"
+  
+---
+
+  **[POST] Add a comment**
+* **URL: `/comment/`**
+* **Body:**
+  - [optional] name = ""
+  - [optional] parentID (should default to "0" if not specified)
+  - [required] photoID
+* **Success Response**
+  - code: 200
+  - success: true
+  - comment: {}
+* **Error Response**
+  - code: error-code
+  - success: false
+  - error: "message"
+  
+---
+
+**[DELETE] Delete a comment**
+* **URL: `/comment/:id`**
+* **Params: -**
+* **Success Response**
+  - code: 200
+  - success: true
+* **Error Response**
+  - code: error-code
+  - success: false
+  - error: "message"
+
+---
+
+ **[PUT] Update information about comment**
+* **URL: `/comment/:id`**
+* **Body:**
+  - [optional] name = ""
+* **Success Response**
+  - code: 200
+  - success: true
+  - comment: {}
+* **Error Response**
+  - code: error-code
   - success: false
   - error: "message"
