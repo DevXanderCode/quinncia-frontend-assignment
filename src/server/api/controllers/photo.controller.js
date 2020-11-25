@@ -37,7 +37,7 @@ export const create = async (req, res) => {
   await new Promise((result) => {
     fs.rename(
       req.file.path,
-      `/Users/Shared/projects/Quinncia/quinncia-frontend-assignment/src/server/storage/photo-${newPhoto._id}.png`,
+      path.resolve(`../storage/photo-${newPhoto._id}.png`),
       result,
     );
   });
@@ -49,7 +49,6 @@ export const create = async (req, res) => {
       photo: newPhoto,
     });
 };
-
 
 export const update = async (req, res) => {
   updateDB(
@@ -68,7 +67,6 @@ export const update = async (req, res) => {
       ),
     });
 };
-
 
 export const attachTags = async (req, res) => {
   const {
@@ -122,11 +120,10 @@ export const remove = async (req, res) => {
 
   // Delete photo from Storage
   try {
-    fs.unlinkSync(path.join(
-      '/Users/Shared/projects/Quinncia/quinncia-frontend-assignment/src/server/storage/photo',
-      `../../storage/photo-${_id}.png`,
-    ));
-  } catch {}
+    fs.unlinkSync(path.resolve(`../storage/photo-${_id}.png`));
+  } catch (err) {
+    console.error(err);
+  }
 
   return res
     .status(200)
@@ -134,7 +131,6 @@ export const remove = async (req, res) => {
       success: true,
     });
 };
-
 
 export const getOne = async (req, res) => {
   const photos = findDB(
@@ -160,10 +156,7 @@ export const getOne = async (req, res) => {
 };
 
 export const getContent = async (req, res) => {
-  res.sendFile(path.join(
-    '/Users/Shared/projects/Quinncia/quinncia-frontend-assignment/src/server/storage/photo',
-    `../../storage/photo-${req.params.id}.png`,
-  ));
+  res.sendFile(path.resolve(`../storage/photo-${req.params.id}.png`));
 };
 
 export const getMany = async (req, res) => {

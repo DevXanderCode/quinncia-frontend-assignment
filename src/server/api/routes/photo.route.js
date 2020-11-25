@@ -12,7 +12,7 @@ import {
 
 const router = express.Router();
 
-router.post('/', multer({ dest: `${__dirname}/../../storage` }).single('profile'), create);
+router.post('/', multer({ dest: `${__dirname}/../storage` }).single('profile'), create);
 router.put('/:_id/tags/attach', attachTags);
 router.put('/:_id', update);
 router.get('/content/:id', getContent);

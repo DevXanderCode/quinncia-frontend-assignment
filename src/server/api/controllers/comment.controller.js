@@ -120,7 +120,6 @@ export const remove = async (req, res) => {
     });
 };
 
-
 export const getOne = async (req, res) => {
   const comments = findDB(
     'comment',
@@ -144,11 +143,10 @@ export const getOne = async (req, res) => {
     });
 };
 
-
 export const getMany = async (req, res) => {
   let comments = findDB(
     'comment',
-    { parentID: '0' },
+    { parentID: 0 },
   );
 
   if (imitateDBFailure()) {
