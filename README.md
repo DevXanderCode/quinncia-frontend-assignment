@@ -1,4 +1,4 @@
-# Quinncia 2020 Front-End Developer Position Assignment
+# Quinncia 2022 Front-End Developer Position Assignment
 
 Brief description:
 > We would like to see the ability to create application that is broken down into components and use API efficiently. Based on the prototype provided (assets/prototype), your task is to create a simple app that would get photos from the back end, post new pictures, comments and tags
