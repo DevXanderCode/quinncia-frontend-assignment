@@ -1,0 +1,12 @@
+build
+coverage
+documentation
+dist
+node_modules*
+dist*
+*.svg
+*.ico
+.gitignore
+*.log
+*.lock
+.eslintignore

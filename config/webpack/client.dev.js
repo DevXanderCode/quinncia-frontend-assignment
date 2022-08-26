@@ -12,7 +12,11 @@ module.exports = merge(common, {
   devtool: 'eval-source-map',
   name: 'client',
   entry: {
-    app: ['react-hot-loader/patch', 'webpack-hot-middleware/client?timeout=2000&path=/__webpack_hmr', clientEntrypoint],
+    app: [
+      'react-hot-loader/patch',
+      'webpack-hot-middleware/client?timeout=2000&path=/__webpack_hmr',
+      clientEntrypoint,
+    ],
   },
   output: {
     filename: '[name].js',
@@ -25,7 +29,5 @@ module.exports = merge(common, {
       'react-dom': '@hot-loader/react-dom',
     },
   },
-  plugins: [
-    new webpack.HotModuleReplacementPlugin(),
-  ],
+  plugins: [new webpack.HotModuleReplacementPlugin()],
 });

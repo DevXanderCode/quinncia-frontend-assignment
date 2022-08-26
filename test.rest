@@ -1,0 +1,11 @@
+POST http://localhost:3000/api/tag HTTP/1.1
+content-type: application/json
+
+
+{
+    "name": "test"
+}
+
+
+#######
+GET http://localhost:3000/api/photo/content/vgnqwYxw24coN1GmSFqtB5ffL5e2BJn3 HTTP/1.1

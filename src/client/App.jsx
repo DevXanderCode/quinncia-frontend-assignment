@@ -1,64 +1,49 @@
 import React from 'react';
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
+import { useSelector } from 'react-redux';
+import { Spin, Modal } from 'antd';
+import { SideBar, RightSideBar, Main } from './components';
 import logo from './logo.svg';
 import Counter from './Counter';
 
-const Spin = keyframes`
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-`;
-
 const Container = styled.div`
-  text-align: center;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: space-between;
 `;
 
-const Header = styled.header`
-  background-color: #282c34;
-  min-height: 100vh;
+const LoaderContainer = styled.div`
   display: flex;
   flex-direction: column;
+  width: 100%;
+  height: 100vh;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  z-index: 1;
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.25);
 `;
 
-const Logo = styled.img`
-  animation: ${Spin} infinite 20s linear;
-  height: 40vmin;
-  pointer-events: none;
-`;
+const App = () => {
+  const { loading } = useSelector((state) => state?.photoReducer);
+  return (
+    <Container>
+      <SideBar />
+      <Main />
+      <RightSideBar />
+      {loading && <Loader />}
+    </Container>
+  );
+};
 
-const Link = styled.a`
-  color: #61dafb;
-`;
-
-const App = () => (
-  <Container>
-    <Header>
-      <Logo src={logo} alt="logo" />
-      <p>
-        Edit
-        {' '}
-        <code>src/App.js</code>
-        {' '}
-        and save to reload.
-      </p>
-      <Link
-        className="App-link"
-        href="https://reactjs.org"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        Learn React
-      </Link>
-      <Counter />
-    </Header>
-  </Container>
+const Loader = () => (
+  <LoaderContainer>
+    <div className="bg-white p-4 rounded-lg flex flex-col items-center justify-center">
+      <Spin />
+      {/* <p>Loading ...</p> */}
+    </div>
+  </LoaderContainer>
 );
 
 export default App;

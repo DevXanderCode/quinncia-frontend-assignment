@@ -1,13 +1,11 @@
 module.exports = {
-  "parser": 'babel-eslint',
+  parser: 'babel-eslint',
   env: {
     browser: true,
     es6: true,
     node: true,
   },
-  extends: [
-    'airbnb',
-  ],
+  extends: ['airbnb'],
   globals: {
     Atomics: 'readonly',
     SharedArrayBuffer: 'readonly',
@@ -19,9 +17,8 @@ module.exports = {
     ecmaVersion: 2018,
     sourceType: 'module',
   },
-  plugins: [
-    'react',
-  ],
+  plugins: ['react'],
   rules: {
+    quotes: [2, 'single', {avoidEscape: true}],
   },
 };
