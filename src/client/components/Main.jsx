@@ -1,8 +1,10 @@
-import React, { memo, useState, useEffect } from 'react';
+/* eslint-disable react/require-default-props */
+/* eslint-disable no-underscore-dangle */
+import React, { useState, useEffect, memo } from 'react';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
-import PropTypes from 'prop-types';
 import { Button } from 'antd';
+import PropTypes from 'prop-types';
 import { PHOTO_LIST, SET_LOADING, TAG_LIST } from '../redux/constants';
 import AddPhoto from './AddPhoto';
 import apiCall from '../services/apiCall';
@@ -20,6 +22,35 @@ const EmptyImg = styled.img`
   width: 20rem;
   height: 20rem;
   margin: auto 0;
+`;
+
+const PhotoItemCont = styled.div`
+  border: 1px solid #d9d9d9;
+  border-radius: 0.75rem;
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0.5rem 1rem;
+  padding: 0.5rem;
+`;
+
+const TextCont = styled.div`
+  width: 100%;
+  margin-top: 1rem;
+`;
+
+const TagItem = styled.div`
+  border-radius: 1rem;
+  padding: 0.05rem 1rem;
+  margin: 0.5rem 0.35rem;
+  border: 1px solid #d9d9d9;
+`;
+
+const TagsCont = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
 `;
 
 const Main = () => {
@@ -66,6 +97,7 @@ const Main = () => {
     getPhotos();
     getTags();
   }, []);
+
   return (
     <Container>
       <div className="border-b">
@@ -82,9 +114,41 @@ const Main = () => {
         </div>
       )}
 
+      {photos?.map((photo) => (
+        <PhotoItem
+          imageUrl={photo?.imageUrl}
+          name={photo?.name}
+          tags={photo?.tags}
+          comments={photo?.comments}
+          key={photo?._id}
+        />
+      ))}
+
       <AddPhoto visible={showPhotoModal} setVisble={setShowPhotoModal} />
     </Container>
   );
+};
+
+const PhotoItem = memo(({ imageUrl, name, tags = [], comments = [] }) => {
+  return (
+    <PhotoItemCont>
+      <img src={imageUrl} className="w-full h-64 rounded-lg" alt={name} />
+      <TextCont>
+        <p>{`Photo name: ${name}`}</p>
+      </TextCont>
+      <TagsCont>
+        {tags?.map((tag, idx) => (
+          <TagItem key={`${tag}-${idx}`}>{tag}</TagItem>
+        ))}
+      </TagsCont>
+    </PhotoItemCont>
+  );
+});
+
+PhotoItem.propTypes = {
+  imageUrl: PropTypes.string.isRequired,
+  name: PropTypes.string,
+  tags: PropTypes.arrayOf(PropTypes.string),
 };
 
 export default Main;

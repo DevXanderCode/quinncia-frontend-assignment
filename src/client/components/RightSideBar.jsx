@@ -29,6 +29,13 @@ const Title = styled.p`
   margin-bottom: 1.2rem;
 `;
 
+const ItemImg = styled.img`
+  width: 3rem;
+  height: 3rem;
+  border-radius: 1.5rem;
+  margin-right: 1rem;
+`;
+
 const RightSideBar = () => {
   const { photos } = useSelector((state) => state?.photoReducer);
   return (
@@ -41,6 +48,7 @@ const RightSideBar = () => {
             ley={`activities-${photo?.id}`}
             image={photo}
             name={photo?.name}
+            imageUrl={photo?.imageUrl}
             date={photo?.updated_at}
           />
         ))}
@@ -51,9 +59,11 @@ const RightSideBar = () => {
   );
 };
 
-const Item = memo(({ name = ' Image', date, image }) => (
+const Item = memo(({ name = ' Image', imageUrl, date, image }) => (
   <div className="mb-4 flex items-center">
-    <div>{/* <img src={} */}</div>
+    <div>
+      <ItemImg src={imageUrl} alt={name} />
+    </div>
 
     <div>
       <p className="mb-0 font-extrabold truncate">Created {name}</p>

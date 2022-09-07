@@ -87,9 +87,13 @@ const AddPhoto = ({ visible = false, setVisble }) => {
       const data = await apiCall({ path: paths?.photo, method: 'post', body: formData });
 
       if (data?.success) {
+        console.log(
+          'Logging added photo',
+          JSON.stringify({ ...data?.photo, imageData: URL.createObjectURL(imgPreview) }, null, 2),
+        );
         dispatch({
           type: ADD_PHOTO,
-          payload: { ...data?.photo },
+          payload: { ...data?.photo, imageUrl: `${URL.createObjectURL(imgPreview)}` },
           callback: selectedTags?.length && attachImageTag(data?.photo?._id),
         });
       }
